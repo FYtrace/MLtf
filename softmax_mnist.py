@@ -11,6 +11,11 @@ softmax for mnist
 
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
 
+# Train:
+#    parameters
+training_epochs = 15
+batch_size = 100
+learning_rate = 0.1
 nb_class = 10
 
 # MNIST data image of shape 28*28 = 784
@@ -24,17 +29,12 @@ b = tf.Variable(tf.random_normal([nb_class]))
 hypoesis = tf.nn.softmax(tf.matmul(X,W) + b)
 
 cost = tf.reduce_mean(-tf.reduce_sum(Y*tf.log(hypoesis), axis=1))
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.1).minimize(cost)
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
 
 # test model
 is_correct = tf.equal(tf.arg_max(hypoesis, 1), tf.arg_max(Y,1))
 # Calculate accuracy
 accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
-
-# Train:
-#    parameters
-training_epochs = 15
-batch_size = 100
 
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
