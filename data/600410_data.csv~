@@ -1,4 +1,4 @@
-,openPrice,highestPrice,lowestPrice,turnoverVol,closePrice
+#,openPrice,highestPrice,lowestPrice,turnoverVol,closePrice
 0,12.24,13.27,12.24,63168144,13.27
 1,13.85,14.46,13.65,139731315,14.15
 2,13.94,14.13,13.69,75596715,13.82

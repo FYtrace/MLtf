@@ -50,10 +50,10 @@ data_dim = 5
 hidden_dim = 10
 output_dim = 1
 learning_rate = 0.01
-iterations = 700
+iterations = 500
 
 # Open, High, Low, Volume, Close
-xy = np.loadtxt('./data/600410_data.csv', delimiter=',')
+xy = np.loadtxt('./data/600570_data.csv', delimiter=',')
 #xy = xy[::-1]  # reverse order (chronically ordered)
 x = MinMaxScaler(xy)
 y = x[:, [-1]]  # Close as label
@@ -79,7 +79,7 @@ for i in range(0, len(y) - seq_length):
     dataY.append(_y)
 
 # train/test split
-train_size = int(len(dataY) * 0.9)
+train_size = int(len(dataY) * 0.7)
 test_size = len(dataY) - train_size
 trainX, testX = np.array(dataX[0:train_size]), np.array(
     dataX[train_size:len(dataX)])
@@ -132,9 +132,20 @@ with tf.Session() as sess:
     test_predict = restore2price(xy, test_predict)
     plt.plot(testY)
     plt.plot(test_predict)
-    
+
+    # count accuary
+    leng = len(np.array(testY))
+    res = 100*((test_predict[1:,] - testY[0:leng-1,])/testY[0:leng-1,])
+    res_act = 100*((testY[1:,] - testY[0:leng-1,])/testY[0:leng-1,])
+    res = (res>1.0)
+    res_act = res_act>0
+    rate = res[res==res_act,]
+    lrate = len(rate[rate==1,])
+    lres = len(res[res==1,])
+    print "accuary: ", lrate/(lres+0.000001)
+
     # write to file 
-    file = open("out.out", 'w+')
+    file = open("600570.out", 'w+')
     for i in range(1,len(np.array(testY))):
         file.write(str(100.0*(test_predict[i]-testY[i-1])/testY[i-1]))
         file.write("    ")
